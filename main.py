@@ -1,6 +1,9 @@
+print("New Login System Added!")
 from tkinter import *
 import json
-jsonfile = "stock.json"
+import time
+jsonfile = "./lib/stock.json" #FP for stock.json file!
+userJson = "./lib/user.json" #FP for user.json file!
 class main:
     def __init__(self,master,stockFile):
         self.stockfile = stockFile
@@ -15,7 +18,7 @@ class main:
         self.paracetamollbl.grid(row = 1, column =0)
         self.paracetamolent = Entry(frame)
         self.paracetamolent.grid(row = 1 , column =1)
-        
+
         self.salbutamollbl = Label(frame, text= "salbutamol")
         self.salbutamollbl.grid(row = 2, column =0)
         self.salbutamolent = Entry(frame)
@@ -38,9 +41,12 @@ class main:
 
         self.submit = Button(frame, text = "Submit", command = self.submit)
         self.submit.grid()
-        
-        self.setDef() #set default entry
 
+        self.setDef() #set default entry
+    def getTime(self):
+        self.t = time.localtime()
+        self.atime = time.strftime("%H:%M:%S",self.t)
+        return self.atime
     def setDef(self):
         with open(self.stockfile,"r") as file:
             self.data = json.load(file)
@@ -54,46 +60,45 @@ class main:
             self.cetent.insert(0,self.getCetStock())
             self.galent.delete(0,"end")
             self.galent.insert(0,self.getGalvus())
-            print("[DEBUG]:DEFAULT SET")
+            print(self.getTime(),": All Entry Set To Json Equivalent")
 
     def getParacetamolStock(self):
         with open(self.stockfile,"r") as getfile:
             self.getdata = json.load(getfile)
         return(self.getdata["paracetamol"]["stock"])
-        print("[DEBUG]:GETPARACETAMOL")
+        print(self.getTime(), ": Paracetamol's Stock Retrived Successfuly")
 
     def getSalbutamolStock(self):
         with open(self.stockfile,"r") as getfile:
             self.getdata = json.load(getfile)
         return(self.getdata["salbutamol"]["stock"])
-        print("[DEBUG]:GETSALBUTAMOL")
+        print(self.getTime(), ": Salbutamol's Stock Retrived Successfuly")
 
     def getBioStock(self):
         with open(self.stockfile, "r") as getfile:
             self.getdata = json.load(getfile)
         return(self.getdata["biogesic"]["stock"])
-        print("[DEBUG]:GETBIO")
-
+        print(self.getTime(), ": Bio's Stock Retrived Successfuly")
     def getCetStock(self):
         with open(self.stockfile,"r") as getfile:
             self.getdata = json.load(getfile)
         return(self.getdata["cetirizine"]["stock"])
-        print("[DEBUG]:GETCET")
+        print(self.getTime(), ": Cet's Stock Successfuly Retrived")
 
     def getGalvus(self):
         with open(self.stockfile,"r") as getfile:
             self.getdata = json.load(getfile)
         return(self.getdata["galvus"]["stock"])
-        print("[DEBUG]:GETGALVUS")
-    
+        print(self.getTime(), "Galvus Stock Retived Successfuly")
+
     def submit(self):
         with open(self.stockfile, "r+") as savefile:
             self.paracetamol = self.paracetamolent.get()
             self.salbutamol = self.salbutamolent.get()
-            self.bio = self.bioent.get() 
+            self.bio = self.bioent.get()
             self.cet = self.cetent.get()
             self.gal = self.galent.get()
-            self.savedata = json.load(savefile) 
+            self.savedata = json.load(savefile)
             if (self.paracetamol == self.getParacetamolStock()):
                 pass
             if (self.salbutamol == self.getSalbutamolStock()):
@@ -106,22 +111,32 @@ class main:
                 pass
             else:
                 self.savedata["paracetamol"]["stock"] = int(self.paracetamol) + self.getParacetamolStock()
-                print("[DEBUG]:Saving paracetamol")
+                print(self.getTime(),"[DEBUG]:Saving paracetamol")
                 self.savedata["salbutamol"]["stock"] = int(self.salbutamol) + self.getSalbutamolStock()
-                print("[DEBUG]:Saving salbutamol")
+                print(self.getTime(),"[DEBUG]:Saving salbutamol")
                 self.savedata["biogesic"]["stock"] = int(self.bio) + self.getBioStock()
-                print("[DEBUG]:Saving bio")
+                print(self.getTime(),"[DEBUG]:Saving bio")
                 self.savedata["cetirizine"]["stock"] = int(self.cet) + self.getCetStock()
-                print("[DEBUG]:Saving cet")
+                print(self.getTime(),"[DEBUG]:Saving cet")
                 self.savedata["galvus"]["stock"] = int(self.gal) + self.getGalvus()
-                print("[DEBUG]:Saving galvus")
+                print(self.getTime(),"[DEBUG]:Saving galvus")
                 savefile.seek(0)
                 json.dump(self.savedata,savefile,indent=4)
-                print("[DEUBG]:DUMPED")
+                print(self.getTime(),"[DEUBG]:DUMPED")
                 savefile.truncate()
                 self.setDef()
-                print("[DEBUG]:Set To default")
-
+                print(self.getTime(),"[DEBUG]:Set To default")
+#This is the nee json login
+with open(userJson, "r") as userfile:
+    users = json.load(userfile)
+    userin = input("UserName:")
+    for userid in users["user"]:
+        while userid not in userin:
+            userin = input("UserName:")
+            if userid in userin:
+                print("[DEBUG]: Input Matched")
+                break
+        break
 root = Tk()
 root.geometry("300x300")
 root.title("Inventory")

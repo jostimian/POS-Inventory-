@@ -1,17 +1,17 @@
 {
     "paracetamol": {
-        "stock": 0
+        "stock": 52224
     },
     "salbutamol": {
-        "stock": 0
+        "stock": 52224
     },
     "biogesic": {
-        "stock": 0
+        "stock": 52224
     },
     "cetirizine": {
-        "stock": 0
+        "stock": 62464
     },
     "galvus": {
-        "stock": 0
+        "stock": 28720
     }
 }
