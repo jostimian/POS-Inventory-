@@ -1,9 +1,9 @@
-print("New Login System Added!")
 from tkinter import *
 import json
 import time
 jsonfile = "./lib/stock.json" #FP for stock.json file!
 userJson = "./lib/user.json" #FP for user.json file!
+users = {"users":"user1"}
 class main:
     def __init__(self,master,stockFile):
         self.stockfile = stockFile
@@ -127,16 +127,14 @@ class main:
                 self.setDef()
                 print(self.getTime(),"[DEBUG]:Set To default")
 #This is the nee json login
-with open(userJson, "r") as userfile:
-    users = json.load(userfile)
-    userin = input("UserName:")
-    for userid in users["user"]:
-        while userid not in userin:
-            userin = input("UserName:")
-            if userid in userin:
-                print("[DEBUG]: Input Matched")
-                break
-        break
+userin = input("UserName:")
+for userid in users["usersa"]:
+    while userid not in userin:
+        userin = input("UserName:")
+        if userid in userin:
+            print("[DEBUG]: Input Matched")
+            break
+    break
 root = Tk()
 root.geometry("300x300")
 root.title("Inventory")
